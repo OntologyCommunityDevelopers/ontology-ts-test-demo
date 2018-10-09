@@ -1,0 +1,53 @@
+{
+  "name": "ontology-ts-test-demo",
+  "version": "0.1.0",
+  "description": "",
+  "scripts": {
+    "test": "jest",
+    "lint": "tslint --project ./"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "testRegex": "/test/.*\\.test\\.(ts|tsx|js)$",
+    "moduleDirectories": [
+      "<rootDir>/node_modules"
+    ]
+  },
+  "author": "Matus Zamborsky <zamborsky@gmail.com>",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OntologyCommunityDevelopers/ontology-ts-test-demo"
+  },
+  "bugs": {
+    "url": "https://github.com/OntologyCommunityDevelopers/ontology-ts-test-demo/issues"
+  },
+  "homepage": "https://github.com/OntologyCommunityDevelopers/ontology-ts-test-demo",
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "@types/node": "^8.5.2",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.19",
+    "cross-env": "^5.2.0",
+    "jest": "^23.4.2",
+    "ts-jest": "^23.1.4",
+    "ts-loader": "^4.3.0",
+    "tslint": "^5.10.0",
+    "tslint-eslint-rules": "^5.3.1",
+    "tslint-no-circular-imports": "^0.4.0",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "ontology-ts-test": "^0.1.1"
+  }
+}
