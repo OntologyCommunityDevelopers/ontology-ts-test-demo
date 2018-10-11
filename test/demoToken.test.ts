@@ -1,6 +1,6 @@
 import 'babel-polyfill';
 import * as https from 'https';
-import { compile, createAccount, deploy, initClient, invoke, loadContract } from 'ontology-ts-test';
+import { compile, createAccount, deploy, hex2num, initClient, invoke, loadContract } from 'ontology-ts-test';
 
 https.globalAgent.options.rejectUnauthorized = false;
 
@@ -30,8 +30,8 @@ describe('Demo Token test', () => {
   test('test deploy', async () => {
     const response = await deploy({ client, code: avm, account: account1 });
 
-    expect(response.Error).toBe(0);
-    expect(response.Result).toBeDefined();
+    expect(response.error).toBe(0);
+    expect(response.result).toBeDefined();
   });
 
   test('test init', async () => {
@@ -39,24 +39,37 @@ describe('Demo Token test', () => {
       client,
       contractHash,
       method: 'init',
+      parameters: [account1.address, account2.address],
       account: account1
     });
 
-    expect(response.Error).toBe(0);
+    expect(response.error).toBe(0);
   });
 
   test('test getBalance of User 1', async () => {
-    const response = await invoke({ client, contractHash, method: 'getBalance', parameters: [account1.address] });
+    const response = await invoke({
+      client,
+      contractHash,
+      method: 'getBalance',
+      parameters: [account1.address],
+      preExec: true
+    });
 
-    expect(response.Error).toBe(0);
-    expect(response.Result).toBe('10000');
+    expect(response.error).toBe(0);
+    expect(hex2num(response.result.Result)).toBe(10000);
   });
 
   test('test getBalance of User 2', async () => {
-    const response = await invoke({ client, contractHash, method: 'getBalance', parameters: [account2.address] });
+    const response = await invoke({
+      client,
+      contractHash,
+      method: 'getBalance',
+      parameters: [account2.address],
+      preExec: true
+    });
 
-    expect(response.Error).toBe(0);
-    expect(response.Result).toBe('0');
+    expect(response.error).toBe(0);
+    expect(hex2num(response.result.Result)).toBe(0);
   });
 
   test('test transfer', async () => {
@@ -68,20 +81,32 @@ describe('Demo Token test', () => {
       parameters: [account1.address, account2.address, 6000]
     });
 
-    expect(response.Error).toBe(0);
+    expect(response.error).toBe(0);
   });
 
   test('test getBalance of User 1 after transfer', async () => {
-    const response = await invoke({ client, contractHash, method: 'getBalance', parameters: [account1.address] });
+    const response = await invoke({
+      client,
+      contractHash,
+      method: 'getBalance',
+      parameters: [account1.address],
+      preExec: true
+    });
 
-    expect(response.Error).toBe(0);
-    expect(response.Result).toBe('4000');
+    expect(response.error).toBe(0);
+    expect(hex2num(response.result.Result)).toBe(4000);
   });
 
   test('test getBalance of User 2 after transfer', async () => {
-    const response = await invoke({ client, contractHash, method: 'getBalance', parameters: [account2.address] });
+    const response = await invoke({
+      client,
+      contractHash,
+      method: 'getBalance',
+      parameters: [account2.address],
+      preExec: true
+    });
 
-    expect(response.Error).toBe(0);
-    expect(response.Result).toBe('6000');
+    expect(response.error).toBe(0);
+    expect(hex2num(response.result.Result)).toBe(6000);
   });
 });
