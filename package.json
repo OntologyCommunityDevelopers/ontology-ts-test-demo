@@ -48,6 +48,6 @@
     "typescript": "^3.0.3"
   },
   "dependencies": {
-    "ontology-ts-test": "^0.1.6"
+    "ontology-ts-test": "^0.1.8"
   }
 }
