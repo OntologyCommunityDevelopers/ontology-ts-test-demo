@@ -5,21 +5,21 @@ import { compile, createAccount, deploy, hex2num, initClient, invoke, loadContra
 https.globalAgent.options.rejectUnauthorized = false;
 
 describe('Demo Token test', () => {
-  const contract = loadContract('./test/demoToken.py');
+  const code = loadContract('./test/demoToken.py');
   const account1 = createAccount('75de8489fcb2dcaf2ef3cd607feffde18789de7da129b5e97c81e001793cb7cf');
   const account2 = createAccount('aade8489fcb2dcaf2ef3cd607feffde18789de7da129b5e97c81e001793cb7cf');
 
   let avm: Buffer;
   let abi: Buffer;
-  let contractHash: string;
+  let contract: string;
 
   const client = initClient({ rpcAddress: 'http://polaris1.ont.io:20336' });
 
   test('test compile', async () => {
-    const response = await compile({ code: contract, type: 'Python' });
+    const response = await compile({ code, type: 'Python' });
     avm = response.avm;
     abi = response.abi;
-    contractHash = response.hash;
+    contract = response.hash;
 
     expect(avm).toBeInstanceOf(Buffer);
     expect(avm.length).toBeGreaterThan(0);
@@ -37,9 +37,9 @@ describe('Demo Token test', () => {
   test('test init', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'init',
-      parameters: [account1.address, account2.address],
+      parameters: [account1.address.toArray(), account2.address.toArray()],
       account: account1
     });
 
@@ -49,9 +49,9 @@ describe('Demo Token test', () => {
   test('test getBalance of User 1', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'getBalance',
-      parameters: [account1.address],
+      parameters: [account1.address.toArray()],
       preExec: true
     });
 
@@ -62,9 +62,9 @@ describe('Demo Token test', () => {
   test('test getBalance of User 2', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'getBalance',
-      parameters: [account2.address],
+      parameters: [account2.address.toArray()],
       preExec: true
     });
 
@@ -75,10 +75,10 @@ describe('Demo Token test', () => {
   test('test transfer', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'transfer',
       account: account1,
-      parameters: [account1.address, account2.address, 6000]
+      parameters: [account1.address.toArray(), account2.address.toArray(), 6000]
     });
 
     expect(response.error).toBe(0);
@@ -87,9 +87,9 @@ describe('Demo Token test', () => {
   test('test getBalance of User 1 after transfer', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'getBalance',
-      parameters: [account1.address],
+      parameters: [account1.address.toArray()],
       preExec: true
     });
 
@@ -100,9 +100,9 @@ describe('Demo Token test', () => {
   test('test getBalance of User 2 after transfer', async () => {
     const response = await invoke({
       client,
-      contractHash,
+      contract,
       method: 'getBalance',
-      parameters: [account2.address],
+      parameters: [account2.address.toArray()],
       preExec: true
     });
 
